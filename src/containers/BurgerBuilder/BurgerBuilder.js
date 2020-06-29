@@ -101,36 +101,46 @@ class BurgerBuilder extends Component {
 
     purchaseContinueHandler = () => {
         // alert('You Continue!')
-        this.setState({
-            loading: true
-        })
+        // this.setState({
+        //     loading: true
+        // })
 
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Junaid',
-                address: {
-                    street: 'Teststreet 1',
-                    zipCode: '10001',
-                    country: 'Pakistan'
-                }
-            }
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'Junaid',
+        //         address: {
+        //             street: 'Teststreet 1',
+        //             zipCode: '10001',
+        //             country: 'Pakistan'
+        //         }
+        //     }
+        // }
+
+        // axios.post('/orders.json', order)
+        //     .then(response => {
+        //         this.setState({
+        //             loading: false,
+        //             purchasing: false
+        //         })
+        //     })
+        //     .catch(error => {
+        //         this.setState({
+        //             loading: false,
+        //             purchasing: false
+        //         })
+        //     })
+        const queryParams = []
+        for (let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]))
         }
+        const queryString = queryParams.join('&')
 
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                })
-            })
-            .catch(error => {
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                })
-            })
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        })
     }
 
     render() {
@@ -152,7 +162,7 @@ class BurgerBuilder extends Component {
                         disabled={disabledInfo}
                         price={this.state.totalPrice}
                         ingredientsAdded={this.addIngredientHandler}
-                        ingredientsRemoved={this.removeIngredientHandler} />F
+                        ingredientsRemoved={this.removeIngredientHandler} />
                 </Aux>
             )
             orderSummary = <OrderSummary
